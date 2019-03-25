@@ -102,25 +102,3 @@ class model:
 def modelCreation():
     return keras.applications.xception.Xception(include_top=True, weights="imagenet", classes=54)
 
-# number = 1
-# def qtable(env):
-#     q_table = np.zeros((100, 54))
-#     y = 0.95
-#     epsilon = 0.5
-#     lr = 0.90
-#     decay = 0.999
-#     for i in range(number):
-#         s = env.reset()
-#         epsilon *= decay
-#         done = False
-#         while not done:
-#             if np.random.random() < epsilon or np.sum(q_table[s, :]) == 0:
-#                 a = np.random.randint(0, 54)
-#             else:
-#                 a = np.argmax(q_table[s, :])
-#
-#             new_s, r, done, _ = env.step(a)
-#
-#             q_table[s, a] += r + lr * (y * np.argmax(q_table[new_s, :]) - q_table[s, a])
-#             s = new_s
-#     return q_table
