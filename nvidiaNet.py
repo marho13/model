@@ -68,31 +68,35 @@ def model(network):
 learning_rate = tf.placeholder(dtype=tf.float32, name="learning_rate")
 
 network = tf.placeholder(dtype=tf.float32, shape=[None, channels, height, width], name="Input")
+hidden = tf.layers.dense(network, units=24)
+outputy = tf.layers.dense(hidden, units=1)
+
+
 label = tf.placeholder(dtype=tf.float32, shape=[None, output])
-prediction = model(network)
+# prediction = model(network)
 
 #Creating the optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=prediction))
 optimiser = tf.train.MomentumOptimizer(learning_rate=learning_rate, momentum=momentum, use_nesterov=True)
 train = optimiser.minimize(cost)
 
-#Local variables
-training, training_update = tf.metrics.accuracy(labels=tf.argmax(label, 1), predictions=tf.argmax(prediction, 1), name="my_training")
-test, test_update = tf.metrics.accuracy(labels=tf.argmax(label, 1), predictions=tf.argmax(prediction, 1), name="my_testing")
+# #Local variables
+# training, training_update = tf.metrics.accuracy(labels=tf.argmax(label, 1), predictions=tf.argmax(prediction, 1), name="my_training")
+# test, test_update = tf.metrics.accuracy(labels=tf.argmax(label, 1), predictions=tf.argmax(prediction, 1), name="my_testing")
+#
+# running_vars = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES)
+# running_vars_initializer = tf.variables_initializer(var_list=running_vars)
+# training_flag = tf.placeholder(tf.bool)
 
-running_vars = tf.get_collection(tf.GraphKeys.LOCAL_VARIABLES)
-running_vars_initializer = tf.variables_initializer(var_list=running_vars)
-training_flag = tf.placeholder(tf.bool)
-
-init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer(), running_vars_initializer)
-
+# init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer(), running_vars_initializer)
+init = tf.global_variable_initializer()
 sess = tf.Session()
 sess.run(init)
 
-saver = tf.train.Saver()
-
-data_order = [i for i in range(1, fileNum + 1)]
-shuffle(data_order)
+# saver = tf.train.Saver()
+#
+# data_order = [i for i in range(1, fileNum + 1)]
+# shuffle(data_order)
 
 
 with tf.Session() as sess:

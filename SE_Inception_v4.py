@@ -6,8 +6,7 @@ import numpy as np
 from random import shuffle
 import sys
 import time
-import file_iter
-import dataamount as da
+
 
 weight_decay = 0.0005
 momentum = 0.9
@@ -19,7 +18,6 @@ reduction_ratio = 4
 
 total_epochs = 100
 
-fileNum = da.fileNum()
 #Training batch is Size -2
 batchSize = 10
 iterNum = int((500/batchSize)//4)
@@ -359,7 +357,8 @@ with tf.Session() as sess:
     # if ckpt and tf.train.checkpoint_exists(ckpt.model_checkpoint_path):
     if ckpt:
         # saver.restore(sess, ckpt.model_checkpoint_path)
-        saver.restore(sess, "/Model")
+        #saver.restore(sess, "/Model")
+        pass
     else:
         sess.run(tf.global_variables_initializer())
     summary_writer = tf.summary.FileWriter("./logs", sess.graph)
@@ -381,7 +380,7 @@ with tf.Session() as sess:
         for i in data_order:
             globTrainIndex = 0
             globTestIndex = 0
-            train_x, train_y, test_x, test_y = file_iter.lessMemIter(i, 480, 270, batchSize)
+            train_x, train_y, test_x, test_y = [None]*4
 
             for _ in range(int(len(train_x))):
                 trainX, trainY = listIter(train_x, train_y, "train")
@@ -429,14 +428,4 @@ with tf.Session() as sess:
 
         with open('logs.txt', 'a') as f:
             f.write(line)
-
-        # saver.save(sess=sess, save_path='./model/SE_Inception_v4{}.ckpt'.format(epoch))
-
-# To run mnist on the models, we need to reshape the images to a size of 299,299,3
-# Meaning rbg and expanded
-# use tf.image
-# from greyscale to rgb = tf.image.grayscale_to_rgb
-# resizing = tf.image.resize_images
-# or
-# inputXgrey = tf.image.resize_images(X, [299,299])
-# inputX = tf.image.greyscale_to_rgb(inputXgrey)
+            #saver.save()
